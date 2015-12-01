@@ -1,4 +1,16 @@
-.title { 
-	font-weight: bold;
-	color: red;
+.songThumb {
+	line-height:1.3em;
+	direction: ltr;
+}
+.title {
+	font-weight: bolder;
+	vertical-align: top;
+	line-height: 6em;
+	padding: 0em 0.4em;
+}
+
+.votes {
+	vertical-align: top;
+	line-height: 6em;
+	padding: 0em 0.9em
 }

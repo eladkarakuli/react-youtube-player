@@ -28,7 +28,7 @@ module.exports = {
       { test: [/\.js$/, /\.jsx$/], exclude: /node_modules/, loader:"babel" },
 
       // load css and process less
-      { test: /\.css$/, loader: "style!css"},
+      { test: /\.css$/, loader: "style-loader!css-loader"},
 
       // load fonts(inline base64 URLs for <=8k)
       { test: /\.(ttf|eot|svg|otf)$/, loader: "file" },

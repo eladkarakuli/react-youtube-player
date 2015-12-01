@@ -1,36 +1,20 @@
 'use strict'
 
+var css = require('style!./youtube-player.css').Promise;
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import PlayList from './playlist';
 
 import YoutubePlayer from './youtubePlayer';
 
-class SongThumb extends Component {
-	render() {
-		return (
-			<div>
-				<img src={this.props.thumbnailUrl} />
-				<span className="title">{this.props.title}</span>
-				<span className="votes">{this.props.votes}</span>
-			</div>
-		)
-	}
-}
-
-class PlayList extends Component {
-	render() {
-		var songThumbs = [];
-		songThumbs = this.props.songs.map(song => 
-			<SongThumb thumbnailUrl={song.thumbnailUrl} title={song.title} votes={song.votes} />
-		);
-
-		return (
-      <div>{songThumbs.length === 0 ? "No songs where loaded" : songThumbs}</div>
-		)
-	}
-}
-
 class App extends Component {
+  setSong(index, id) {
+    this.setState({
+      activeSongIndex: index,
+      selectedSongId: id
+    });
+  }
   state = {
     selectedSongId: '',
     songs: [],
@@ -43,10 +27,7 @@ class App extends Component {
 
     var index = (this.state.activeSongIndex + 1) % this.state.songs.length;
     var songId = this.state.songs[index].id;
-    this.setState({
-        activeSongIndex: index,
-        selectedSongId: songId
-    });
+    this.setSong(index, songId);
   }
   componentDidMount() {
     $.get("http://redux101.500tech.com/playlists/redux101", (result) => {
@@ -56,8 +37,12 @@ class App extends Component {
       this.nextSong();
     });
   }
-  _onEnd() {
+  _onEnd = () => {
     this.nextSong();
+  }
+  handelSelecteSong = (songId) => {
+    let index = this.state.songs.findIndex(song => song.id === songId);
+    this.setSong(index, songId);
   }
   render() {
     return (
@@ -67,7 +52,7 @@ class App extends Component {
       		<YoutubePlayer videoID={this.state.selectedSongId} onEnd={this._onEnd.bind(this)}/>
       	</div>
       	<div>
-      		<PlayList songs={this.state.songs}/>
+      		<PlayList songs={this.state.songs} onSongSelected={this.handelSelecteSong.bind(this)}/>
       	</div>
       </div>
     )
